@@ -17,16 +17,15 @@
             <div class="card-body p-4">
               <h4 class="mb-4 text-center">Create New Post</h4>
 
-              <form action="/blog" method="post">
+              <form action="/blog" method="post" enctype="multipart/form-data">
                 <!-- cover image -->
 
                 <div class="mb-3">
                   <label for="cover-image" class="form-label">Cover Image</label>
                   <input
-                  name="converImageUrl"
+                    name="coverImageUrl"
                     type="file"
                     class="form-control"
-                    name="title"
                     id="cover-image"
                     placeholder="add image..."
                     required

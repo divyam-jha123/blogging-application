@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        <%= blog.title %> - Blogify
+    </title>
+
+    <%- include('./partials/head') %>
+</head>
+
+<body>
+    <%- include('./partials/nav') %>
+
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+
+
+                    <article>
+
+                        <% if (blog.converImageUrl) { %>
+                            <img src="<%= blog.converImageUrl %>" class="img-fluid rounded mb-4 w-100"
+                                alt="<%= blog.title %>" style="max-height: 400px; object-fit: cover;">
+                            <% } %>
+
+
+                                <h1 class="display-5 fw-bold mb-3">
+                                    <%= blog.title %>
+                                </h1>
+
+
+                                <div class="d-flex flex-column text-muted mb-4 pb-3 border-bottom">
+                                    <span class="me-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-calendar3 me-1" viewBox="0 0 16 16">
+                                            <path
+                                                d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z" />
+                                            <path
+                                                d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+                                        </svg>
+                                        <%= new Date(blog.createdAt).toLocaleDateString('en-US', { weekday: 'long' ,
+                                            year: 'numeric' , month: 'long' , day: 'numeric' }) %>
+                                    </span>
+                                    <br>
+                                    <div class="me-2 mb-0">
+                                        <p>Posted By: <%= blog.createdBy.userName %>
+                                        </p>
+                                    </div>
+                                </div>
+
+
+                                <div class="blog-content fs-5 lh-lg">
+                                    <%- blog.body.replace(/\n/g, '<br>' ) %>
+                                </div>
+
+                    </article>
+
+                    <div class="mt-5 pt-4 border-top">
+                        <h6 class="text-muted mb-3">Share this post</h6>
+                        <div class="d-flex gap-2">
+                            <a href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(blog.title) %>"
+                                target="_blank" class="btn btn-outline-primary btn-sm">
+                                Twitter
+                            </a>
+                            <a href="https://www.linkedin.com/sharing/share-offsite/" target="_blank"
+                                class="btn btn-outline-primary btn-sm">
+                                LinkedIn
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-5 text-center">
+                        <a href="/" class="btn btn-primary">
+                            &larr; Back to All Blogs
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <%- include('./partials/script') %>
+</body>
+
+</html>

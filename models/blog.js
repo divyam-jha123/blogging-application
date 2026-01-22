@@ -15,7 +15,7 @@ const blogSchema = new mongoose.Schema({
         required: false,
     },
     createdBy: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     }
 
@@ -23,4 +23,4 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('blogPost', blogSchema);
 
-modules.exports = Blog;
+module.exports = Blog;
