@@ -2,8 +2,6 @@ const { Router } = require('express');
 const Blog = require('../models/blog');
 const multer = require('multer');
 const path = require('path');
-const { constrainedMemory } = require('process');
-const { timeLog } = require('console');
 const router = Router();
 
 const storage = multer.diskStorage({
@@ -19,7 +17,7 @@ const upload = multer({ storage });
 
 router.get('/add-new', (req, res) => {
   return res.render('addBlogs', {
-    user: res.user,
+    user: req.user,
   });
 });
 

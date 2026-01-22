@@ -20,6 +20,7 @@ function createToken(user) {
 
 function verifyUser(token) {
     const payload = jwt.verify(token, secret);    
+
     return payload;
 }
 

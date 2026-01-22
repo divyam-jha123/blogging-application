@@ -11,7 +11,7 @@ const checkForAuthenticationCookie = (cookieName) => {
 
         try {
             const userPayload = verifyUser(tokenCookieValue);
-            // storing teh users info in the server
+            // storing the users info in the server
             req.user = userPayload;
         } catch (error) { }
         return next();

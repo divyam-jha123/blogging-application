@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const app = express();
 const { checkForAuthenticationCookie } = require('./middlewares/auth');
+const { verifyUser } = require('./service/authentication');
 
 const Blog = require('./models/blog');
 
@@ -23,7 +24,7 @@ app.use(checkForAuthenticationCookie("token"));
 app.set("view engine", "ejs");
 app.set("views", path.resolve('./views'));
 
-app.get('/', async (req, res) => {
+app.get('/', async (req, res) => {    
 
     if (!req.user) {
         return res.redirect('/user/login');
