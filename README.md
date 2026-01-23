@@ -137,4 +137,3 @@ blogging-application/
 |------------|--------------------------------|
 | `npm start` | Run the server                 |
 | `npm run dev` | Run with nodemon (auto-reload) |
-

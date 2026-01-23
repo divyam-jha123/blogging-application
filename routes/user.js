@@ -2,6 +2,7 @@ const { Router } = require('express');
 const User = require('../models/user');
 const { createToken, verifyUser } = require('../service/authentication');
 const { compare } = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 const router = Router();
 
@@ -88,6 +89,58 @@ router.post('/login', async (req, res) => {
         })
     }
 });
+
+// forget page
+
+router.get('/forgetPass', (req, res) => {
+    return res.render('forgetPass');
+});
+
+router.post('/forgetPass', async (req, res) => {
+    try {
+        const { email, newPassword, confirmPassword } = req.body;
+
+        // Validate input fields
+        if (!email || !newPassword || !confirmPassword) {
+            return res.render('forgetPass', {
+                error: 'All fields are required'
+            });
+        }
+
+        // Check if passwords match
+        if (newPassword !== confirmPassword) {
+            return res.render('forgetPass', {
+                error: 'Passwords do not match'
+            });
+        }
+
+        if (newPassword.length < 6) {
+            return res.render('forgetPass', {
+                error: 'Password must be at least 6 characters long'
+            });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.render('forgetPass', {
+                error: 'User not found with this email address'
+            });
+        }
+        user.password = newPassword;
+        await user.save();
+
+        return res.render('login', {        
+            success: 'Password updated successfully'
+        })
+    } catch (error) {
+        console.error('Error updating password:', error);
+        return res.render('forgetPass', {
+            error: 'An error occurred. Please try again later.'
+        });
+    }
+});
+
 
 
 
