@@ -1,10 +1,32 @@
 const { Router } = require('express');
 const User = require('../models/user');
+const Blog = require('../models/blog');
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
 const { createToken, verifyUser } = require('../service/authentication');
-const { compare } = require('bcrypt');
+const { restrictToLoggedinUserOnly } = require('../middlewares/auth');
+
 const bcrypt = require('bcrypt');
+const { ReturnDocument } = require('mongodb');
 
 const router = Router();
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = multer.memoryStorage();
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024,
+    }
+
+})
 
 router.get('/signup', (req, res) => {
     return res.render('signup');
@@ -62,7 +84,7 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        const isMatch = await compare(
+        const isMatch = await bcrypt.compare(
             password,
             user.password,
         )
@@ -130,7 +152,7 @@ router.post('/forgetPass', async (req, res) => {
         user.password = newPassword;
         await user.save();
 
-        return res.render('login', {        
+        return res.render('login', {
             success: 'Password updated successfully'
         })
     } catch (error) {
@@ -140,6 +162,50 @@ router.post('/forgetPass', async (req, res) => {
         });
     }
 });
+
+router.get('/profile', restrictToLoggedinUserOnly, async (req, res) => {
+
+    const blogs = await Blog.find({createdBy: req.user._id});
+
+    return res.render('profile' , {
+        user: req.user,
+        blogs,
+    });
+});
+
+router.post('/upload-profile-image', restrictToLoggedinUserOnly, upload.single('profileImage'), async (req, res) => {
+
+    let profileImage = '';
+
+    try {
+
+        // uplorad to cloudinary
+
+        const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+
+        const uploadResult = await cloudinary.uploader.upload(base64Image, {
+            folder: 'profile_images',
+            resource_type: 'auto',
+        });
+
+        profileImage = uploadResult.secure_url;
+
+        const user = await User.findById(req.user._id);
+        user.profileImageURL = profileImage;
+        await user.save();
+
+        return res.json({
+            msg: 'profile image uploaded successfully',
+            profileImageURL: profileImage
+        });
+
+    } catch (error) {
+
+        console.log("error:", error);
+        return res.status(500).send('Error uploading profile image. Please try again.');
+
+    }
+})
 
 
 

@@ -16,6 +16,7 @@ const userRoute = require('./routes/user');
 const blogsRoute = require('./routes/blog');
 
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(cookieParser());
