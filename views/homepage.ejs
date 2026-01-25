@@ -55,6 +55,63 @@
     </div>
 
     <%- include('./partials/script') %>
+
+      <!-- Add Blog Fixed Button -->
+      <style>
+        #addBlogBtn {
+          position: fixed;
+          top: 50%;
+          right: 0;
+          transform: translateY(-50%);
+          background-color: black;
+          color: white;
+          padding: 10px 15px;
+          text-decoration: none;
+          font-weight: bold;
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+          box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2);
+          z-index: 1000;
+          transition: transform 0.3s ease-in-out, background-color 0.2s;
+        }
+
+        #addBlogBtn:hover {
+          background-color: #333;
+        }
+
+        /* Mobile Viewport Adjustment */
+        @media (max-width: 768px) {
+          #addBlogBtn {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+          }
+        }
+      </style>
+
+      <a href="/blog/add-new" id="addBlogBtn">
+        Add Blog
+      </a>
+
+      <script>
+        let isScrolling;
+        const addBlogBtn = document.getElementById('addBlogBtn');
+
+        window.addEventListener('scroll', () => {
+          // Hide button while scrolling
+          addBlogBtn.style.transform = 'translate(100%, -50%)';
+
+          // Clear previous timeout
+          window.clearTimeout(isScrolling);
+
+          // Set a timeout to run after scrolling ends
+          isScrolling = setTimeout(() => {
+            // Show button again
+            addBlogBtn.style.transform = 'translate(0, -50%)';
+          }, 150);
+        });
+      </script>
 </body>
 
 </html>
